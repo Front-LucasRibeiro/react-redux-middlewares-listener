@@ -5,6 +5,10 @@ const categoriasService = {
     const resposta = await instance.get('/categorias');
 
     return resposta.data;
+  },
+  searchOneCategory: async (nameCategory) => {
+    const response = await instance.get(`/categorias/${nameCategory}`)
+    return response.data
   }
 }
 

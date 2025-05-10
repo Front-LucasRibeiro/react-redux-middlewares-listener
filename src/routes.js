@@ -11,9 +11,9 @@ export default function Router() {
       <Routes>
         <Route path='/' element={<PaginaPadrao />}>
           <Route index element={<Home />} />
-          <Route path='/categoria/:nomeCategoria' element={<Categoria />} />
+          <Route path='/categoria/:nameCategory' element={<Categoria />} />
           <Route path='carrinho' element={<Carrinho />} />
-          <Route path='anuncie/:nomeCategoria' element={<Anuncie />} />
+          <Route path='anuncie/:nameCategory' element={<Anuncie />} />
           <Route path='anuncie' element={<Anuncie />} />
         </Route>
       </Routes>

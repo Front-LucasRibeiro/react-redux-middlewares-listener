@@ -1,25 +1,34 @@
 import Button from 'components/Button';
 import Header from 'components/Header';
-import { useDispatch, useSelector } from 'react-redux';
-import styles from './Anuncie.module.scss';
-import { useForm } from 'react-hook-form';
-import { cadastrarItem } from 'store/reducers/itens';
-import { useParams } from 'react-router-dom';
 import Input from 'components/Input';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { carregarCategorias, loadOneCategory } from 'store/reducers/categorias';
+import { cadastrarItem } from 'store/reducers/itens';
+import styles from './Anuncie.module.scss';
 
 export default function Anuncie() {
   const dispatch = useDispatch();
-  const { nomeCategoria = '' } = useParams();
+  const { categoryName = '' } = useParams();
   const categorias = useSelector(state => state.categorias.map(({ nome, id }) => ({ nome, id })));
   const { register, handleSubmit } = useForm({
     defaultValues: {
-      categoria: nomeCategoria
+      categoria: categoryName
     }
   });
 
   function cadastrar(data) {
     dispatch(cadastrarItem(data));
   }
+
+  useEffect(() => {
+    dispatch(categoryName 
+      ? loadOneCategory(categoryName) 
+      : carregarCategorias
+    )
+  }, [dispatch, categoryName])
 
   return (
     <div className={styles.container}>
@@ -33,7 +42,7 @@ export default function Anuncie() {
         <Input {...register('foto', { required: true })} placeholder='URL da imagem do produto' alt='URL da imagem do produto' />
         <select
           {...register('categoria', { required: true })}
-          disabled={nomeCategoria}
+          disabled={categoryName}
         >
           <option value='' disabled > Selecione a categoria </option>
           {categorias.map(categoria => (
