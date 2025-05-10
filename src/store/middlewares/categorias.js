@@ -3,9 +3,9 @@ import categoriasService from "services/categorias";
 import { addAllCategories, addOneCategory, carregarCategorias, loadOneCategory } from "store/reducers/categorias";
 import createTask from "./utils/createTask";
 
-export const listener = createListenerMiddleware()
+export const categoriesListener = createListenerMiddleware()
 
-listener.startListening({
+categoriesListener.startListening({
   actionCreator: carregarCategorias,
   effect: async (action, { dispatch, fork, unsubscribe }) => {
     const response = await createTask({
@@ -23,22 +23,21 @@ listener.startListening({
       // se entrarmos na pag de uma categoria e voltar para home não rechama o listener
       unsubscribe()
     }
-
   }
 });
 
 // criando um novo listener para um novo objetivo 
-listener.startListening({
+categoriesListener.startListening({
   actionCreator: loadOneCategory,
   effect: async (action, { fork, dispatch, getState, unsubscribe }) => {
     // pegando as categorias que existem no redux, para evitar carregar novamente as categorias se já foram carregadas
-    const { categories } = getState()
+    const { categorias } = getState()
 
     const nameCategory = action.payload
-    const categoryLoad = categories.some(category => category.id === nameCategory)
+    const categoryLoad = categorias.some(category => category.id === nameCategory)
 
-    if(categoryLoad) return
-    if(categories.length === 5) return unsubscribe()
+    if (categoryLoad) return
+    if (categorias.length === 5) return unsubscribe()
 
     await createTask({
       fork,
